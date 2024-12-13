@@ -88,7 +88,7 @@ DATABASES = {
         'NAME': os.getenv('POSTGRES_DB', 'store_db'),
         'USER': os.getenv('POSTGRES_USER', 'admin'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', '123456admin'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),  # Should match Docker service name (e.g., db)
+        'HOST': os.getenv('DB_HOST', 'db'),  # Should match Docker service name (e.g., db)
         'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
