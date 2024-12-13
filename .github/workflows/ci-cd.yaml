@@ -35,7 +35,7 @@ jobs:
       # Paso 3: Construir y correr contenedor
       - name: Build and run Docker container
         run: |
-          docker compose -f docker compose.yml up --build -d
+          docker compose -f docker-compose.yml up --build -d
           docker compose exec web python manage.py migrate
 
       # Paso 4: Pruebas
