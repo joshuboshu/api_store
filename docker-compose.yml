@@ -1,33 +1,41 @@
 services:
   db:
     image: postgres:14
-    restart: always
     container_name: postgresql
-    volumes:
-      - db-data:/var/lib/postgresql/data
+    restart: always
     environment:
       POSTGRES_DB: store_db
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: 123456admin
+    volumes:
+      - db-data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"  # Puerto mapeado de PostgreSQL (host:container)
+      - "5432:5432"  # Asegúrate de mapear el puerto 5432
+    networks:
+      - app_network
 
   web:
     build: .
     container_name: django
-    command: python manage.py runserver 0.0.0.0:8000  # Cambiado a 8000
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/app  # Cambiado a /app, que es el directorio de trabajo en el Dockerfile
+      - .:/app
     ports:
-      - "8000:8000"  # Mapea el mismo puerto dentro y fuera del contenedor
+      - "8000:8000"
     environment:
-      - POSTGRES_NAME=store_db
+      - POSTGRES_DB=store_db
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=123456admin
-      - POSTGRES_HOST=db  # Asegura que el host sea el nombre del servicio de la base de datos
-      - POSTGRES_PORT=5432  # Puerto interno del contenedor de PostgreSQL
+      - DB_HOST=db  # Usar 'db' como el nombre del servicio de PostgreSQL
+      - DB_PORT=5432
     depends_on:
       - db
+    networks:
+      - app_network
 
 volumes:
   db-data:
+
+networks:
+  app_network:
+    driver: bridge
